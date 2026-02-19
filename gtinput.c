@@ -459,17 +459,14 @@ static wchar_t *key_to_name(glui32 key)
     }
 
     if (key >= 0 && key < 32) {
-        /* swprintf(kbuf, 32, L"ctrl-%c", '@'+key); */
-        int l;
-        kbuf[0] = L'\0';
-        wcsncat(kbuf, L"ctrl-", 32);
-        l = wcslen(kbuf);
-        kbuf[l] = UCS('@'+key);
-        kbuf[l + 1] = L'\0';
+        swprintf(kbuf, 32, L"ctrl-%c", '@'+key);
+        return kbuf;
+    }
+    if (key >= 1280 && key <= -1153) {
+        swprintf(kbuf, 32, L"alt+%c", key-keycode_AltPlus);
         return kbuf;
     }
 
-    /* return L"unknown-key"; */
     swprintf(kbuf, 32, L"unknown-key(%d)", key);
     return kbuf;
 }
