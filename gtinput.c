@@ -190,8 +190,10 @@ static command_t *commands_textbuffer(glui32 key)
             return &cmdscrolltotop;
         case '\026': /* ctrl-V */
             return &cmdscrolltobottom;
+        case keycode_AltPlus + 'p':
         case keycode_PageUp:
             return &cmdscrolluppage;
+        case keycode_AltPlus + 'n':
         case keycode_PageDown:
             return &cmdscrolldownpage;
     }
@@ -222,6 +224,8 @@ static command_t *commands_textbuffer_line(window_textbuffer_t *dwin, glui32 key
     static command_t cmdinsert = { gcmd_buffer_insert_key, -1 };
     static command_t cmdmoveleft = { gcmd_buffer_move_cursor, gcmd_Left };
     static command_t cmdmoveright = { gcmd_buffer_move_cursor, gcmd_Right };
+    static command_t cmdwordleft = { gcmd_buffer_move_cursor, gcmd_WordLeft };
+    static command_t cmdwordright = { gcmd_buffer_move_cursor, gcmd_WordRight };
     static command_t cmdmoveleftend = { gcmd_buffer_move_cursor, gcmd_LeftEnd };
     static command_t cmdmoverightend = { gcmd_buffer_move_cursor, gcmd_RightEnd };
     static command_t cmddelete = { gcmd_buffer_delete, gcmd_Delete };
@@ -259,6 +263,10 @@ static command_t *commands_textbuffer_line(window_textbuffer_t *dwin, glui32 key
             return &cmdkillline;
         case '\025': /* ctrl-U */
             return &cmdkillinput;
+        case keycode_AltPlus + 'b':
+            return &cmdwordleft;
+        case keycode_AltPlus + 'f':
+            return &cmdwordright;
         case '\027': /* ctrl-W */
             return &cmddeleteword;
         case keycode_Up:
@@ -387,7 +395,7 @@ static wchar_t *key_to_name(glui32 key)
     switch (key) {
         case L'\t':
             return L"tab";
-        case L'\033':
+        case keycode_Escape:
             return L"escape";
         case keycode_Down:
             return L"down-arrow";
@@ -461,7 +469,9 @@ static wchar_t *key_to_name(glui32 key)
         return kbuf;
     }
 
-    return L"unknown-key";
+    /* return L"unknown-key"; */
+    swprintf(kbuf, 32, L"unknown-key(%d)", key);
+    return kbuf;
 }
 
 /* Forbidden Latin-1 input values */
@@ -627,6 +637,8 @@ glui32 gli_translate_key(int status, wint_t key)
                 break;
             case L'\033':
                 arg = keycode_Escape;
+                if (gli_get_key(&key) == ERR) { break; }
+                arg = keycode_AltPlus + key;
                 break;
             case L'\177': /* delete */
             case L'\010': /* backspace */

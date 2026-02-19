@@ -126,6 +126,10 @@ typedef struct event_struct {
 #define keycode_Func10   (0xffffffe6)
 #define keycode_Func11   (0xffffffe5)
 #define keycode_Func12   (0xffffffe4)
+
+/* Escape X / ALT+X */
+#define keycode_AltPlus     (0xfffffaff)
+
 /* The last keycode is always (0x100000000 - keycode_MAXVAL) */
 #define keycode_MAXVAL   (28)
 

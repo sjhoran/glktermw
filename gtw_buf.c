@@ -1231,6 +1231,18 @@ void gcmd_buffer_move_cursor(window_t *win, glui32 arg)
                 return;
             dwin->incurs++;
             break;
+        case gcmd_WordLeft:
+            /* move back over any trialing whitespace, then a second loop to
+               move over any non-whitespace until we hit either the start of that word or the start of the input line */
+            while (dwin->incurs > dwin->infence && dwin->chars[dwin->incurs-1] == L' ') { dwin->incurs--; }
+            while (dwin->incurs > dwin->infence && dwin->chars[dwin->incurs-1] != L' ') { dwin->incurs--; }
+            break;
+        case gcmd_WordRight:
+            /* move forward over any nonm-whitespace, then a second loop to
+               move over any trailing whitespace until we hit either the start of the next word or the end of the input line */
+            while (dwin->incurs < dwin->numchars && dwin->chars[dwin->incurs] != L' ') { dwin->incurs++; }
+            while (dwin->incurs < dwin->numchars && dwin->chars[dwin->incurs] == L' ') { dwin->incurs++; }
+            break;
         case gcmd_LeftEnd:
             if (dwin->incurs <= dwin->infence)
                 return;

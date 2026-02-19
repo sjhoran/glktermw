@@ -14,7 +14,7 @@ CC = gcc -ansi
 
 # Uncomment below line if you want to lie
 # to terps about supporting sound
-SOUND=-DLIE_ABOUT_SOUND
+#SOUND=-DLIE_ABOUT_SOUND
 
 # You may need to set directories to pick up the ncursesw library.
 #INCLUDEDIRS = -I/usr/5include

@@ -136,9 +136,11 @@ struct glk_fileref_struct {
 #define gcmd_DownPage (10)
 #define gcmd_Delete (11)
 #define gcmd_DeleteNext (12)
-#define gcmd_DeleteWord (15)
 #define gcmd_KillInput (13)
 #define gcmd_KillLine (14)
+#define gcmd_DeleteWord (15)
+#define gcmd_WordLeft (16)
+#define gcmd_WordRight (17)
 
 /* A few global variables */
 

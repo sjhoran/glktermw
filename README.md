@@ -20,6 +20,9 @@ My changes/additions/modifications:
 * delete key is now treated differently to backspace and deletes the
   character under cursor like expected.
 * CTRL+W does readline style word deletion.
+* ALT+F/ALT+B now does readline style forward/back by a word
+* keycode_AltPlus now exists for easy ALT+X key triggers
+* Unknown key error messages now include key value
 * Added an option (See SOUND line in Makefile) to allow you to trick
   terps into thinking they support sound. I had a reason to want this,
   you probably don't, so keep it commented out unless you also have a
@@ -27,12 +30,11 @@ My changes/additions/modifications:
 
 Things I'd like to do/see someone else do:
 
-* Add ALT+F/B (esc-f/esc-b) support for readline style
-  line-navigation. Adding the functions to move back and forth should
-  be easy, but am still figuring out ncurses and how it deals with
-  extended escape sequences.
 * Actually add sound support. Gargoyle's SDL sound support is ripe for
   the stealing here.
+* Make it possible to move the status line from the top of screen to the
+  bottom. (I'm of the understanding this is largely dictated by the game,
+  not glktermw, so this would probably be a kludge at best)
 
 Hopefully these mods will appeal to at least one person out there and
 make their terminal-based text-adventuring slightly more pleasant.
