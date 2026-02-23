@@ -493,3 +493,7 @@ void glkunix_set_base_file(char *filename)
     strcat(lastdataname, gli_suffix_for_usage(fileusage_Data));
 }
 
+char *glk_fileref_get_filename(frefid_t fref) {
+    if (!fref) { return NULL; }
+    return fref->filename;
+}
