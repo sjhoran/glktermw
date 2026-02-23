@@ -1,5 +1,6 @@
 #ifndef GLK_H
 #define GLK_H
+#define SJHGLKTERMW
 
 /* glk.h: Header file for Glk API, version 0.7.4.
     Designed by Andrew Plotkin <erkyrath@eblong.com>
