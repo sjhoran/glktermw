@@ -1,6 +1,6 @@
 #ifndef GLK_H
 #define GLK_H
-#define SJHGLKTERMW
+#define GLKUNIX_FILEREF_GET_FILENAME
 
 /* glk.h: Header file for Glk API, version 0.7.4.
     Designed by Andrew Plotkin <erkyrath@eblong.com>
@@ -290,7 +290,7 @@ extern frefid_t glk_fileref_iterate(frefid_t fref, glui32 *rockptr);
 extern glui32 glk_fileref_get_rock(frefid_t fref);
 extern void glk_fileref_delete_file(frefid_t fref);
 extern glui32 glk_fileref_does_file_exist(frefid_t fref);
-extern char *glk_fileref_get_filename(frefid_t fref);
+extern const char *glkunix_fileref_get_filename(frefid_t fref);
 
 extern void glk_select(event_t *event);
 extern void glk_select_poll(event_t *event);
