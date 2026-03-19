@@ -25,10 +25,19 @@ static fileref_t *gli_filereflist = NULL;
 #define BUFLEN (256)
 
 static char workingdir[BUFLEN] = ".";
+
 static char lastsavename[BUFLEN] = "game.glksave";
 static char lastscriptname[BUFLEN] = "script.txt";
 static char lastcmdname[BUFLEN] = "commands.txt";
 static char lastdataname[BUFLEN] = "file.glkdata";
+
+void gli_init_wdenv(void) {
+    char *wdenv = getenv("OVERRIDE_WORKING_DIR");
+    if (wdenv != NULL) {
+        
+        snprintf(workingdir, sizeof(workingdir), "%s", wdenv);
+    }
+}
 
 int gli_wcs_from_mbs(wchar_t *wcsbuf, int len, const char *mbsbuf)
 {
@@ -491,6 +500,7 @@ void glkunix_set_base_file(char *filename)
     strcat(lastsavename, gli_suffix_for_usage(fileusage_SavedGame));
     strcat(lastscriptname, gli_suffix_for_usage(fileusage_Transcript));
     strcat(lastdataname, gli_suffix_for_usage(fileusage_Data));
+
 }
 
 const char *glkunix_fileref_get_filename(frefid_t fref) {

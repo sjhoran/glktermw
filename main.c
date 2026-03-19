@@ -246,6 +246,7 @@ int main(int argc, char *argv[])
     }
     inittime = FALSE;
     /* Call the program main entry point, and then exit. */
+    gli_init_wdenv();
     glk_main();
     glk_exit();
     

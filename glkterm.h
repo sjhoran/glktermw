@@ -257,6 +257,7 @@ extern void gli_streams_close_all(void);
 extern fileref_t *gli_new_fileref(char *filename, glui32 usage, 
     glui32 rock);
 extern void gli_delete_fileref(fileref_t *fref);
+extern void gli_init_wdenv(void);
 
 extern int local_get_wch(wint_t *ch);
 extern int local_addwstr(const wchar_t *wstr);
