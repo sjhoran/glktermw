@@ -33,10 +33,25 @@ static char lastdataname[BUFLEN] = "file.glkdata";
 
 void gli_init_wdenv(void) {
     char *wdenv = getenv("OVERRIDE_WORKING_DIR");
-    if (wdenv != NULL) {
-        
-        snprintf(workingdir, sizeof(workingdir), "%s", wdenv);
+    wchar_t buf[256];
+    if (wdenv == NULL) { return; }
+    struct stat st;
+    if (stat(wdenv, &st) == 0) {
+        if (S_ISDIR(st.st_mode)) {
+            if (access(wdenv, W_OK) == 0) {
+                snprintf(workingdir, sizeof(workingdir), "%s", wdenv);
+                swprintf(buf, 256, L"OVERRIDE_WORKING_DIR set. WD is now: %s", wdenv);
+            } else {
+                swprintf(buf, 256, L"OVERRIDE_WORKING_DIR set, but \"%s\" is not writable. Ignoring.", wdenv);
+            }
+        } else {
+            swprintf(buf, 256, L"OVERRIDE_WORKING_DIR set, but \"%s\" is not a directory. Ignoring.", wdenv);
+        }
+    } else {
+        swprintf(buf, 256, L"OVERRIDE_WORKING_DIR set, but \"%s\" does not exist. Ignoring.", wdenv);
     }
+        
+    gli_msgline(buf);
 }
 
 int gli_wcs_from_mbs(wchar_t *wcsbuf, int len, const char *mbsbuf)
