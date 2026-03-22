@@ -1428,16 +1428,18 @@ void gcmd_buffer_tabcomplete(window_t *win, glui32 arg)
 
     wcsncpy(prefix, dwin->chars + start, dwin->incurs - start);
     prefix[dwin->incurs - start] = L'\0';
-    start = dwin->historypos - 1;
-    while (dwin->history[start] && start >= 0) {
-        if (get_completion_suffix(dwin->history[start], prefix, &match_suffix)) {
+    start = dwin->historypresent;
+    while (1) {
+        if (dwin->history[start] && get_completion_suffix(dwin->history[start], prefix, &match_suffix)) {
             put_text(dwin, match_suffix, wcslen(match_suffix), dwin->incurs, 0);
             updatetext(dwin);
             break;
         }
+        if (start == dwin->historyfirst) { break; }
         start--;
+        if (start < 0) { start += pref_historylen; }
     }
-    swprintf(msgbuf, 256, L"prefix is \"%ls\", histline is \"%ls\", suffix is \"%ls\"", prefix, dwin->history[0], match_suffix);
+    swprintf(msgbuf, 256, L"prefix is \"%ls\", histline is \"%ls\", suffix is \"%ls\", hpos = %d, hpres = %d, hfirst = %d", prefix, dwin->history[dwin->historypos-1], match_suffix, dwin->historypos, dwin->historypresent, dwin->historyfirst);
     gli_msgline(msgbuf);
 }
 
