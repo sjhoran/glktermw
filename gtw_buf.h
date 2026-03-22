@@ -115,4 +115,5 @@ extern void gcmd_buffer_move_cursor(window_t *win, glui32 arg);
 extern void gcmd_buffer_delete(window_t *win, glui32 arg);
 extern void gcmd_buffer_history(window_t *win, glui32 arg);
 extern void gcmd_buffer_scroll(window_t *win, glui32 arg);
+extern void gcmd_buffer_tabcomplete(window_t *win, glui32 arg);
 

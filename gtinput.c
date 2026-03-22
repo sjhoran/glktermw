@@ -235,6 +235,7 @@ static command_t *commands_textbuffer_line(window_textbuffer_t *dwin, glui32 key
     static command_t cmdkillline = { gcmd_buffer_delete, gcmd_KillLine };
     static command_t cmdhistoryprev = { gcmd_buffer_history, gcmd_Up };
     static command_t cmdhistorynext = { gcmd_buffer_history, gcmd_Down };
+    static command_t cmdtabcomplete = { gcmd_buffer_tabcomplete, 0 };
 
     if (key >= 32 && key < 256 && key != 127) 
         return &cmdinsert;
@@ -267,6 +268,8 @@ static command_t *commands_textbuffer_line(window_textbuffer_t *dwin, glui32 key
             return &cmdwordleft;
         case keycode_AltPlus + 'f':
             return &cmdwordright;
+        case keycode_AltPlus + 't':
+            return &cmdtabcomplete;
         case '\027': /* ctrl-W */
             return &cmddeleteword;
         case keycode_Up:

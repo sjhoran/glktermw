@@ -1410,3 +1410,56 @@ void gcmd_buffer_scroll(window_t *win, glui32 arg)
         dwin->lastseenline = dwin->numlines;
     }
 }
+
+void gcmd_buffer_tabcomplete(window_t *win, glui32 arg)
+{
+    window_textbuffer_t *dwin = win->data;
+    long start = dwin->incurs;
+    while (start > dwin->infence && dwin->chars[start-1] != L' ') { start--; }
+    if (start == dwin->incurs) {
+        gli_msgline(L"Char preceding cursor isn't non-whitespact, bailing.");
+        return;
+    }
+    /* let's extract the beginning of the string to complete */
+    wchar_t prefix[256];
+    wchar_t match_suffix[256];
+    match_suffix[0] = L'\0';
+    wchar_t msgbuf[256];
+
+    wcsncpy(prefix, dwin->chars + start, dwin->incurs - start);
+    prefix[dwin->incurs - start] = L'\0';
+    start = dwin->historypos - 1;
+    while (dwin->history[start] && start >= 0) {
+        if (get_completion_suffix(dwin->history[start], prefix, &match_suffix)) {
+            put_text(dwin, match_suffix, wcslen(match_suffix), dwin->incurs, 0);
+            updatetext(dwin);
+            break;
+        }
+        start--;
+    }
+    swprintf(msgbuf, 256, L"prefix is \"%ls\", histline is \"%ls\", suffix is \"%ls\"", prefix, dwin->history[0], match_suffix);
+    gli_msgline(msgbuf);
+}
+
+int get_completion_suffix(wchar_t *haystack, wchar_t *prefix, wchar_t *out_suffix) {
+    int nlen = wcslen(prefix);
+    int hlen = wcslen(haystack);
+
+    for (int j = 0; j <= hlen - nlen; j++) {
+        if (j == 0 || iswspace(haystack[j-1]) || iswpunct(haystack[j-1])) {
+            if (wcsncasecmp(&haystack[j], prefix, nlen) == 0) {
+                int s_idx = j + nlen;
+                int out_idx = 0;
+
+                while (haystack[s_idx] && !iswspace(haystack[s_idx]) && 
+                       !iswpunct(haystack[s_idx])) {
+                    out_suffix[out_idx++] = haystack[s_idx++];
+                }
+                
+                out_suffix[out_idx] = L'\0'; // Cap it safely
+                return 1; // Success!
+            }
+        }
+    }
+    return 0; // No match
+}
