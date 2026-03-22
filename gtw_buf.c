@@ -1411,20 +1411,24 @@ void gcmd_buffer_scroll(window_t *win, glui32 arg)
     }
 }
 
-void gcmd_buffer_tabcomplete(window_t *win, glui32 arg)
-{
+void gcmd_buffer_tabcomplete(window_t *win, glui32 arg) {
     window_textbuffer_t *dwin = win->data;
+    wchar_t msgbuf[256];
+
+    if (dwin->incurs == dwin->infence) {
+        /* empty line, change focus instead */
+        gcmd_win_change_focus(NULL, 0);
+        return;
+    }
     long start = dwin->incurs;
     while (start > dwin->infence && dwin->chars[start-1] != L' ') { start--; }
     if (start == dwin->incurs) {
-        gli_msgline(L"Char preceding cursor isn't non-whitespact, bailing.");
-        return;
+        return; /* start didn't move, so bail */
     }
     /* let's extract the beginning of the string to complete */
     wchar_t prefix[256];
     wchar_t match_suffix[256];
     match_suffix[0] = L'\0';
-    wchar_t msgbuf[256];
 
     wcsncpy(prefix, dwin->chars + start, dwin->incurs - start);
     prefix[dwin->incurs - start] = L'\0';
@@ -1439,8 +1443,11 @@ void gcmd_buffer_tabcomplete(window_t *win, glui32 arg)
         start--;
         if (start < 0) { start += pref_historylen; }
     }
+    /*
     swprintf(msgbuf, 256, L"prefix is \"%ls\", histline is \"%ls\", suffix is \"%ls\", hpos = %d, hpres = %d, hfirst = %d", prefix, dwin->history[dwin->historypos-1], match_suffix, dwin->historypos, dwin->historypresent, dwin->historyfirst);
+    swprintf(msgbuf, 256, L"numchars = %d, incurs = %d, infence = %d", dwin->numchars, dwin->incurs, dwin->infence);
     gli_msgline(msgbuf);
+    */
 }
 
 int get_completion_suffix(wchar_t *haystack, wchar_t *prefix, wchar_t *out_suffix) {

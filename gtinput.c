@@ -37,11 +37,12 @@ typedef struct command_struct {
 /* Keys which are always meaningful. */
 static command_t *commands_always(glui32 key)
 {
-    static command_t cmdchangefocus = { gcmd_win_change_focus, 0 };
+static command_t cmdchangefocus = { gcmd_win_change_focus, 0 };
     static command_t cmdrefresh = { gcmd_win_refresh, 0 };
 
     switch (key) {
-        case keycode_Tab: 
+        /* case keycode_Tab: */
+        case keycode_AltPlus + 'w': 
             return &cmdchangefocus;
         case '\014': /* ctrl-L */
             return &cmdrefresh;
@@ -53,6 +54,8 @@ static command_t *commands_always(glui32 key)
 /* Keys which are always meaningful in a text grid window. */
 static command_t *commands_textgrid(glui32 key)
 {
+static command_t cmdchangefocus = { gcmd_win_change_focus, 0 };
+    if (key == keycode_Tab) { return &cmdchangefocus; }
     return NULL;
 }
 
@@ -268,6 +271,7 @@ static command_t *commands_textbuffer_line(window_textbuffer_t *dwin, glui32 key
             return &cmdwordleft;
         case keycode_AltPlus + 'f':
             return &cmdwordright;
+        case keycode_Tab:
         case keycode_AltPlus + 't':
             return &cmdtabcomplete;
         case '\027': /* ctrl-W */
