@@ -1,3 +1,5 @@
+# Enhanced glktermw
+
 glktermw is a fork of the original glkterm library by Andrew
 Plotkin. glktermw supports unicode characters whereas the original is
 limited to latin1.
@@ -27,6 +29,9 @@ My changes/additions/modifications:
 * ALT+F/ALT+B now does readline style forward/back by a word
 * keycode_AltPlus now exists for easy ALT+X key triggers
 * Unknown key error messages now include key value
+* Looks for OVERRIDE_WORKING_DIR environment variable.
+    * If set and is a valid path, all file I/O is relative to that path.
+    * This is not a security feature, I added it to make it easy to keep save games separate from game files.
 * Added an option (See SOUND line in Makefile) to allow you to trick
   terps into thinking they support sound. I had a reason to want this,
   you probably don't, so keep it commented out unless you also have a
