@@ -25,8 +25,12 @@ My changes/additions/modifications:
     * Only considers first match
     * First looks for candidates in input history
     * Failing that, searches in most recent 100 lines of scrollback
+* Moved old tab function to alt+w, but tab should still work like before when
+  input line is empty.
 * CTRL+W does readline style word deletion.
 * ALT+F/ALT+B now does readline style forward/back by a word
+* alt+p/alt+n work the same as page up/down
+* alt+a/alt+e go to the beginning/end of scrollback buffer
 * keycode_AltPlus now exists for easy ALT+X key triggers
 * Unknown key error messages now include key value
 * Looks for OVERRIDE_WORKING_DIR environment variable.
