@@ -1415,6 +1415,10 @@ void gcmd_buffer_scroll(window_t *win, glui32 arg)
 void gcmd_buffer_tabcomplete(window_t *win, glui32 arg) {
     window_textbuffer_t *dwin = win->data;
     wchar_t msgbuf[256];
+    wchar_t prefix[256];
+    wchar_t match_suffix[256];
+    match_suffix[0] = L'\0';
+    int hasmatch = 0;
 
     if (dwin->incurs == dwin->infence) {
         /* empty line, change focus instead */
@@ -1427,13 +1431,8 @@ void gcmd_buffer_tabcomplete(window_t *win, glui32 arg) {
         return; /* start didn't move, so bail */
     }
     /* let's extract the beginning of the string to complete */
-    wchar_t prefix[256];
-    wchar_t match_suffix[256];
-    match_suffix[0] = L'\0';
-    int hasmatch = 0;
-
     wcsncpy(prefix, dwin->chars + start, dwin->incurs - start);
-    prefix[255] = L'\0';
+    prefix[dwin->incurs - start] = L'\0';
     start = dwin->historypresent;
     while (!hasmatch) {
         if (dwin->history[start] && get_completion_suffix(dwin->history[start], prefix, &match_suffix)) {
