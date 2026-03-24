@@ -43,6 +43,7 @@ static command_t cmdchangefocus = { gcmd_win_change_focus, 0 };
     switch (key) {
         /* case keycode_Tab: */
         case keycode_AltPlus + 'w': 
+        case keycode_AltPlus + 'W': 
             return &cmdchangefocus;
         case '\014': /* ctrl-L */
             return &cmdrefresh;
@@ -190,13 +191,19 @@ static command_t *commands_textbuffer(glui32 key)
 
     switch (key) {
         case '\031': /* ctrl-Y */
+        case keycode_AltPlus + 'a':
+        case keycode_AltPlus + 'A':
             return &cmdscrolltotop;
         case '\026': /* ctrl-V */
+        case keycode_AltPlus + 'e':
+        case keycode_AltPlus + 'E':
             return &cmdscrolltobottom;
         case keycode_AltPlus + 'p':
+        case keycode_AltPlus + 'P':
         case keycode_PageUp:
             return &cmdscrolluppage;
         case keycode_AltPlus + 'n':
+        case keycode_AltPlus + 'N':
         case keycode_PageDown:
             return &cmdscrolldownpage;
     }
@@ -268,11 +275,14 @@ static command_t *commands_textbuffer_line(window_textbuffer_t *dwin, glui32 key
         case '\025': /* ctrl-U */
             return &cmdkillinput;
         case keycode_AltPlus + 'b':
+        case keycode_AltPlus + 'B':
             return &cmdwordleft;
         case keycode_AltPlus + 'f':
+        case keycode_AltPlus + 'F':
             return &cmdwordright;
         case keycode_Tab:
         case keycode_AltPlus + 't':
+        case keycode_AltPlus + 'T':
             return &cmdtabcomplete;
         case '\027': /* ctrl-W */
             return &cmddeleteword;
