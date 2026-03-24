@@ -11,6 +11,7 @@
 #include <string.h>
 #include <wchar.h>
 #include <curses.h>
+#include <wctype.h>
 #include "glk.h"
 #include "glkterm.h"
 #include "gtw_buf.h"
@@ -1429,12 +1430,14 @@ void gcmd_buffer_tabcomplete(window_t *win, glui32 arg) {
     wchar_t prefix[256];
     wchar_t match_suffix[256];
     match_suffix[0] = L'\0';
+    int hasmatch = 0;
 
     wcsncpy(prefix, dwin->chars + start, dwin->incurs - start);
-    prefix[dwin->incurs - start] = L'\0';
+    prefix[255] = L'\0';
     start = dwin->historypresent;
-    while (1) {
+    while (!hasmatch) {
         if (dwin->history[start] && get_completion_suffix(dwin->history[start], prefix, &match_suffix)) {
+            hasmatch = 1;
             put_text(dwin, match_suffix, wcslen(match_suffix), dwin->incurs, 0);
             updatetext(dwin);
             break;
@@ -1443,11 +1446,18 @@ void gcmd_buffer_tabcomplete(window_t *win, glui32 arg) {
         start--;
         if (start < 0) { start += pref_historylen; }
     }
-    /*
-    swprintf(msgbuf, 256, L"prefix is \"%ls\", histline is \"%ls\", suffix is \"%ls\", hpos = %d, hpres = %d, hfirst = %d", prefix, dwin->history[dwin->historypos-1], match_suffix, dwin->historypos, dwin->historypresent, dwin->historyfirst);
-    swprintf(msgbuf, 256, L"numchars = %d, incurs = %d, infence = %d", dwin->numchars, dwin->incurs, dwin->infence);
-    gli_msgline(msgbuf);
-    */
+
+    /* if a search of input line history didn't match, let's search scrolback */
+    wchar_t sbline[256];
+    /* numlines - 2 so we don't try and match the input line */
+    for (int i = dwin->numlines-2;!hasmatch && i>=0&&i>=dwin->numlines-102;i--) {
+        swprintf(sbline, 256, L"%.*ls", dwin->lines[i].len, dwin->chars + dwin->lines[i].pos);
+        if (hasmatch = get_completion_suffix(sbline, prefix, &match_suffix)) {
+            put_text(dwin, match_suffix, wcslen(match_suffix), dwin->incurs, 0);
+            updatetext(dwin);
+            break;
+        }
+    }
 }
 
 int get_completion_suffix(wchar_t *haystack, wchar_t *prefix, wchar_t *out_suffix) {
@@ -1465,10 +1475,10 @@ int get_completion_suffix(wchar_t *haystack, wchar_t *prefix, wchar_t *out_suffi
                     out_suffix[out_idx++] = haystack[s_idx++];
                 }
                 
-                out_suffix[out_idx] = L'\0'; // Cap it safely
-                return 1; // Success!
+                out_suffix[out_idx] = L'\0';
+                if (wcslen(out_suffix) > 0) {return 1; }
             }
         }
     }
-    return 0; // No match
+    return 0;
 }

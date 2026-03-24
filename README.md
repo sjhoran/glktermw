@@ -19,6 +19,10 @@ My changes/additions/modifications:
   scrollback.
 * delete key is now treated differently to backspace and deletes the
   character under cursor like expected.
+* Basic tab completion
+    * Only considers first match
+    * First looks for candidates in input history
+    * Failing that, searches in most recent 100 lines of scrollback
 * CTRL+W does readline style word deletion.
 * ALT+F/ALT+B now does readline style forward/back by a word
 * keycode_AltPlus now exists for easy ALT+X key triggers

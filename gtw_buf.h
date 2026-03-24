@@ -116,4 +116,6 @@ extern void gcmd_buffer_delete(window_t *win, glui32 arg);
 extern void gcmd_buffer_history(window_t *win, glui32 arg);
 extern void gcmd_buffer_scroll(window_t *win, glui32 arg);
 extern void gcmd_buffer_tabcomplete(window_t *win, glui32 arg);
+extern int get_completion_suffix(wchar_t *haystack, wchar_t *prefix, wchar_t *out_suffix);
+
 
