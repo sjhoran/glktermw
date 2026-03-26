@@ -5,6 +5,8 @@
 */
 
 #define _XOPEN_SOURCE /* wcwidth */
+#define _GNU_SOURCE /* make glibc happy */
+
 #include "gtoption.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -1435,7 +1437,7 @@ void gcmd_buffer_tabcomplete(window_t *win, glui32 arg) {
     prefix[dwin->incurs - start] = L'\0';
     start = dwin->historypresent;
     while (!hasmatch) {
-        if (dwin->history[start] && get_completion_suffix(dwin->history[start], prefix, &match_suffix)) {
+        if (dwin->history[start] && get_completion_suffix(dwin->history[start], prefix, match_suffix)) {
             hasmatch = 1;
             put_text(dwin, match_suffix, wcslen(match_suffix), dwin->incurs, 0);
             updatetext(dwin);
@@ -1451,7 +1453,7 @@ void gcmd_buffer_tabcomplete(window_t *win, glui32 arg) {
     /* numlines - 2 so we don't try and match the input line */
     for (int i = dwin->numlines-2;!hasmatch && i>=0&&i>=dwin->numlines-102;i--) {
         swprintf(sbline, 256, L"%.*ls", dwin->lines[i].len, dwin->chars + dwin->lines[i].pos);
-        if (hasmatch = get_completion_suffix(sbline, prefix, &match_suffix)) {
+        if (hasmatch = get_completion_suffix(sbline, prefix, match_suffix)) {
             put_text(dwin, match_suffix, wcslen(match_suffix), dwin->incurs, 0);
             updatetext(dwin);
             break;
