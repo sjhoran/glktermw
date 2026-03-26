@@ -9,8 +9,7 @@
 # and glk.h, glkstart.h, and Make.glktermw in the include directory.
 
 # Pick a C compiler.
-#CC = cc
-CC = gcc -ansi
+CC = cc
 
 # Uncomment below line if you want to lie
 # to terps about supporting sound
