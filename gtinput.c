@@ -56,7 +56,12 @@ static command_t cmdchangefocus = { gcmd_win_change_focus, 0 };
 static command_t *commands_textgrid(glui32 key)
 {
 static command_t cmdchangefocus = { gcmd_win_change_focus, 0 };
-    if (key == keycode_Tab) { return &cmdchangefocus; }
+    switch (key) {
+        case keycode_Tab:
+        case keycode_AltPlus + 't':
+        case keycode_AltPlus + 'T':
+            return &cmdchangefocus;
+    }
     return NULL;
 }
 
