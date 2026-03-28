@@ -1,0 +1,9 @@
+*.o
+*.a
+*.core
+core
+core.*
+*~
+*.swp
+Make.glktermw
+
