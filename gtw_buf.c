@@ -258,7 +258,7 @@ static long layout_chars(window_textbuffer_t *dwin, long chbeg, long chend,
     
     while (numwords || cx < chend || lastlinetype != wd_EndPage) {
         tbline_t *ln;
-        int lineover, lineeatto, lastsolidwd;
+        int lineover, lineeatto; /* lastsolidwd defined here previously */
         long lineeatpos = 0;
         long wx, wx2;
         int linewidth, widthsofar;
@@ -275,7 +275,7 @@ static long layout_chars(window_textbuffer_t *dwin, long chbeg, long chend,
         
         lineover = FALSE;
         lineeatto = 0;
-        lastsolidwd = 0;
+        /* lastsolidwd = 0; -- set but never used */
         widthsofar = 0;
         linewidth = dwin->width;
         
@@ -1263,6 +1263,7 @@ void gcmd_buffer_move_cursor(window_t *win, glui32 arg)
 void gcmd_buffer_delete(window_t *win, glui32 arg)
 {
     window_textbuffer_t *dwin = win->data;
+    long start;
     
     if (!dwin->inbuf)
         return;
@@ -1274,7 +1275,7 @@ void gcmd_buffer_delete(window_t *win, glui32 arg)
             put_text(dwin, L"", 0, dwin->incurs-1, 1);
             break;
         case gcmd_DeleteWord:
-            long start = dwin->incurs;
+            start = dwin->incurs;
             /* move back over any trialing whitespace, then a second loop to
                move over any non-whitespace until we hit either the start of that word or the start of the input line */
             while (start > dwin->infence && dwin->chars[start-1] == L' ') { start--; }
@@ -1416,7 +1417,6 @@ void gcmd_buffer_scroll(window_t *win, glui32 arg)
 
 void gcmd_buffer_tabcomplete(window_t *win, glui32 arg) {
     window_textbuffer_t *dwin = win->data;
-    wchar_t msgbuf[256];
     wchar_t prefix[256];
     wchar_t match_suffix[256];
     match_suffix[0] = L'\0';
@@ -1453,7 +1453,7 @@ void gcmd_buffer_tabcomplete(window_t *win, glui32 arg) {
     /* numlines - 2 so we don't try and match the input line */
     for (int i = dwin->numlines-2;!hasmatch && i>=0&&i>=dwin->numlines-102;i--) {
         swprintf(sbline, 256, L"%.*ls", dwin->lines[i].len, dwin->chars + dwin->lines[i].pos);
-        if (hasmatch = get_completion_suffix(sbline, prefix, match_suffix)) {
+        if ((hasmatch = get_completion_suffix(sbline, prefix, match_suffix))) {
             put_text(dwin, match_suffix, wcslen(match_suffix), dwin->incurs, 0);
             updatetext(dwin);
             break;
