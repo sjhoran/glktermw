@@ -177,14 +177,15 @@ static char *gli_suffix_for_usage(glui32 usage)
 
 frefid_t glk_fileref_create_temp(glui32 usage, glui32 rock)
 {
-    char *filename;
+    char filename[] = "/tmp/glktermw-temp-file-XXXXXX";
     fileref_t *fref;
     
-    /* This is a pretty good way to do this on Unix systems. On Macs,
-        it's pretty bad, but this library won't be used on the Mac 
-        -- I hope. I have no idea about the DOS/Windows world. */
-        
-    filename = tmpnam(NULL);
+    int tmpfd = mkstemp(filename);
+    if (tmpfd == -1) {
+        gli_strict_warning("Unabled to create temporary file.");
+        return NULL;
+    }
+    close(tmpfd);
     
     fref = gli_new_fileref(filename, usage, rock);
     if (!fref) {
