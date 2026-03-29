@@ -182,7 +182,7 @@ frefid_t glk_fileref_create_temp(glui32 usage, glui32 rock)
     
     int tmpfd = mkstemp(filename);
     if (tmpfd == -1) {
-        gli_strict_warning("Unabled to create temporary file.");
+        gli_strict_warning(L"Unabled to create temporary file.");
         return NULL;
     }
     close(tmpfd);
