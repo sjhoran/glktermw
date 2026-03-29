@@ -656,7 +656,9 @@ glui32 gli_translate_key(int status, wint_t key)
                 break;
             case L'\033':
                 arg = keycode_Escape;
-                if (gli_get_key(&key) == ERR) { break; }
+                glui32 key32;
+                if (gli_get_key(&key32) == ERR) { break; }
+                key = key32;
                 arg = keycode_AltPlus + key;
                 break;
             case L'\177': /* delete */
