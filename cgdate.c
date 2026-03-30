@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <strings.h>
+#include <string.h>
 #include <stdlib.h>
 #include <time.h>
 #include <sys/time.h>
@@ -35,7 +36,7 @@ static glsi32 gli_date_to_tm(glkdate_t *date, struct tm *tm)
 {
     glsi32 microsec;
 
-    bzero(tm, sizeof(tm));
+    memset(tm, 0, sizeof(*tm));
     tm->tm_year = date->year - 1900;
     tm->tm_mon = date->month - 1;
     tm->tm_mday = date->day;
