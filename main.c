@@ -268,13 +268,13 @@ static int extract_value(int argc, char *argv[], char *optname, int type,
     int *argnum, int *result, int defval)
 {
     int optlen, val;
-    char *cx, *origcx, firstch;
+    char *cx, *origcx; /* firstch previously defined here but never used*/
     
     optlen = strlen(optname);
     origcx = argv[*argnum];
     cx = origcx;
     
-    firstch = *cx;
+    /* firstch = *cx; -- set but never used */
     cx++;
     
     if (strncmp(cx, optname, optlen))

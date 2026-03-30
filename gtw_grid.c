@@ -496,7 +496,7 @@ void win_textgrid_init_line(window_t *win, void *buf, int unicode,
 void win_textgrid_cancel_line(window_t *win, event_t *ev)
 {
     void *inbuf;
-    int inoriglen, inmax, inunicode;
+    int inoriglen, inunicode; /* inmax previously defined here but not used */
     gidispatch_rock_t inarrayrock;
     window_textgrid_t *dwin = win->data;
     tgline_t *ln = &(dwin->lines[dwin->inorgy]);
@@ -505,7 +505,7 @@ void win_textgrid_cancel_line(window_t *win, event_t *ev)
         return;
     
     inbuf = dwin->inbuf;
-    inmax = dwin->inmax;
+    /* inmax = dwin->inmax; -- set but never used */
     inoriglen = dwin->inoriglen;
     inarrayrock = dwin->inarrayrock;
     inunicode = dwin->inunicode;
@@ -599,7 +599,7 @@ void gcmd_grid_accept_key(window_t *win, glui32 arg)
 void gcmd_grid_accept_line(window_t *win, glui32 arg)
 {
     void *inbuf;
-    int inoriglen, inmax, inunicode;
+    int inoriglen, inunicode; /* inmax previously defined here but not used */
     glui32 termkey = arg;
     gidispatch_rock_t inarrayrock;
     window_textgrid_t *dwin = win->data;
@@ -609,7 +609,7 @@ void gcmd_grid_accept_line(window_t *win, glui32 arg)
         return;
     
     inbuf = dwin->inbuf;
-    inmax = dwin->inmax;
+    /* inmax = dwin->inmax; -- set but never used */
     inoriglen = dwin->inoriglen;
     inarrayrock = dwin->inarrayrock;
     inunicode = dwin->inunicode;
