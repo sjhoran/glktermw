@@ -33,6 +33,7 @@ static void set_last_run(window_textbuffer_t *dwin, glui32 style);
 static void import_input_line(window_textbuffer_t *dwin, void *buf, 
     int unicode, long len);
 static void export_input_line(void *buf, int unicode, long len, wchar_t *chars);
+static int get_completion_suffix(const wchar_t *haystack, const wchar_t *prefix, wchar_t *out_suffix);
 
 window_textbuffer_t *win_textbuffer_create(window_t *win)
 {
@@ -1461,7 +1462,7 @@ void gcmd_buffer_tabcomplete(window_t *win, glui32 arg) {
     }
 }
 
-int get_completion_suffix(wchar_t *haystack, wchar_t *prefix, wchar_t *out_suffix) {
+static int get_completion_suffix(const wchar_t *haystack, const wchar_t *prefix, wchar_t *out_suffix) {
     int nlen = wcslen(prefix);
     int hlen = wcslen(haystack);
 
